@@ -11,10 +11,10 @@
     padding: 8px 5px 8px 5px;
 }
 
-    .navbar a {
+.navbar a {
         text-decoration: none;
         color: inherit;
-    }
+}
 
 .navbar-brand {
     font-size: 1.2em;
@@ -29,4 +29,55 @@
 .body-content {
     padding: 5px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+    padding: 5px 120px;
+    width: 350px;
+    height: 70px;
+    background-color: #236B8E;
+}
+
+.border {
+    padding: 80px 50px;
+    width: 600px;
+    height: 300px;
+    border: 1px solid #236B8E;
+    border-radius: 0px;
+    background-color: #9AC0CD;
+}
+
+.btn {
+    padding: 10px 40px;
+    background-color: #236B8E;
+    color: #FFFFFF;
+    font-style: oblique;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.textbox {
+    padding: 10px 40px;
+    background-color: #236B8E;
+    text-color: #FFFFFF;
+    border-radius: 10px;
+}
+
+::placeholder {
+    color: #FFFFFF;
+    opacity: 1;
+    font-style: oblique;
+    font-weight: bold;
+}
+
+.word {
+    color: #FFFFFF;
+    font-style: oblique;
+    font-weight: bold;
+}
+
+.bottom {
+    color: #236B8E;
+    font-style: oblique;
+    font-weight: bold;
 }

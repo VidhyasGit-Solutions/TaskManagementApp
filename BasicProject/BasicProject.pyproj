@@ -42,6 +42,8 @@
     <Content Include="UserLogin\templates\index.html" />
     <Content Include="UserLogin\templates\about.html" />
     <Content Include="UserLogin\templates\layout.html" />
+    <Content Include="UserLogin\templates\register.html" />
+    <Content Include="UserLogin\templates\login.html" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
