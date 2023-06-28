@@ -11,6 +11,7 @@ wsgi_app = app.wsgi_app
 
 
 @app.route('/')
+@app.route('/hello')
 def hello():
     """Renders a sample page."""
     return "Hello World!"
