@@ -1,5 +1,5 @@
 import os
-from UserLogin import app    # Imports the code from UserLogin/__init__.py
+from UserLogin import runserver    # Imports the code from UserLogin/__init__.py
 
 if __name__ == '__main__':
     HOST = os.environ.get('SERVER_HOST', 'localhost')
@@ -9,4 +9,4 @@ if __name__ == '__main__':
     except ValueError:
         PORT = 5555
 
-    app.run(HOST, PORT)
+    runserver.run(HOST, PORT)

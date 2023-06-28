@@ -38,7 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="UserLogin\static\site.css" />
     <Content Include="UserLogin\templates\index.html" />
+    <Content Include="UserLogin\templates\about.html" />
+    <Content Include="UserLogin\templates\layout.html" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
@@ -52,6 +55,7 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="UserLogin\static\" />
     <Folder Include="UserLogin\" />
     <Folder Include="UserLogin\templates\" />
   </ItemGroup>
