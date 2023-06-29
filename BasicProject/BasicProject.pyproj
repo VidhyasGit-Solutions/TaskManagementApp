@@ -42,6 +42,9 @@
     <Content Include="UserLogin\templates\index.html" />
     <Content Include="UserLogin\templates\about.html" />
     <Content Include="UserLogin\templates\layout.html" />
+    <Content Include="UserLogin\templates\taskList.html" />
+    <Content Include="UserLogin\templates\taskdisplay.html" />
+    <Content Include="UserLogin\templates\tasks.html" />
     <Content Include="UserLogin\templates\register.html" />
     <Content Include="UserLogin\templates\login.html" />
   </ItemGroup>

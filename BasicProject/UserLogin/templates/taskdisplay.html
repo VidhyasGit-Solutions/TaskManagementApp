@@ -1,0 +1,63 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> Task Management </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+</head>
+<body>
+    </br>
+    <div align="center">
+        <div align="center" class="border">
+            <div class="header">
+                <h1>Update Task</h1>
+            </div></br>
+            <h2 class="word">
+                <form action="{{ url_for('updatetask', taskId=taskdisplay[0]) }}" method="post">
+                    <table class="tablenoborder">
+                        <tr>
+                            <td>
+                                <input id="tasktitle" name="tasktitle" type="text" placeholder="Enter TaskTitle" class="textbox" value="{{taskdisplay[2]}}"/>
+                                <span class="mandatory">*</span>
+                            </td>
+                            <td>
+                                <input id="taskdescription" name="taskdescription" type="text" placeholder="Enter TaskDescription" class="textbox"  value="{{taskdisplay[3]}}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="taskcategory" name="taskcategory" type="text" placeholder="Enter TaskCategory" class="textbox" value="{{taskdisplay[4]}}"/>
+                            </td>
+                            <td>
+                                <select id="taskpriority" name="taskpriority" class="textbox">
+                                    <option disabled selected hidden class="textbox">Select an option</option>
+                                    <option value="high" class="textbox" {% if taskdisplay[5] == 'high' %}selected{% endif %}>High</option>
+                                    <option value="medium" class="textbox" {% if taskdisplay[5] == 'medium' %}selected{% endif %}>Medium</option>
+                                    <option value="low" class="textbox" {% if taskdisplay[5] == 'low' %}selected{% endif %}>Low</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="taskstatus" name="taskstatus" class="textbox">
+                                    <option disabled selected hidden class="textbox">Select an option</option>
+                                    <option value="new" class="textbox" {% if taskdisplay[6] == 'new' %}selected{% endif %}>New</option>
+                                    <option value="pending" class="textbox" {% if taskdisplay[6] == 'pending' %}selected{% endif %}>Pending</option>
+                                    <option value="inprogress" class="textbox" {% if taskdisplay[6] == 'inprogress' %}selected{% endif %}>In-Progress</option>
+                                    <option value="complete" class="textbox" {% if taskdisplay[6] == 'complete' %}selected{% endif %}>Completed</option>
+                                </select>
+                                <span class="mandatory">*</span>
+                            </td>
+                            <td>
+                               <input id="taskduedate" name="taskduedate" type="date" placeholder="Enter TaskDueDate" class="textbox" value="{{taskdisplay[7]}}" />
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <input type="submit" class="btn" value="Update Task">
+                    <a href="{{ url_for('tasklist') }}" class="link">View Task</a>
+                </form>
+            </h2>
+        </div>
+    </div>
+</body>
+</html>

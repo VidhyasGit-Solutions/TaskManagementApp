@@ -1,0 +1,110 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> Task Management </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+    <script>
+        // Function to sort the table by column
+        function sortTable(column) {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("taskTable");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[column];
+                    y = rows[i + 1].getElementsByTagName("TD")[column];
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    </br>
+    <div align="center">
+        <div align="center" class="border">
+            <div class="header">
+                <h1 class="word">Task List</h1>
+            </div>
+            <h2 class="word">
+                {% if taskLists %}
+                <!-- Table to display tasks -->
+                <table class="table" id="taskTable">
+                    <tr>
+                        <th class="th" onclick="sortTable(0)">Task Title</th>
+                        <th class="th" onclick="sortTable(1)">Task Category</th>
+                        <th class="th" onclick="sortTable(2)">Task Priority</th>
+                        <th class="th" onclick="sortTable(3)">Task Status</th>
+                        <th class="th">Actions</th>
+                    </tr>
+                    {% for taskList in taskLists %}
+                    <tr>
+                        <td class="td">{{ taskList.name }}</td>
+                        <td class="td">{{ taskList.category }}</td>
+                        <td class="td">{{ taskList.priority }}</td>
+                        <td class="td">{{ taskList.status }}</td>
+                        <td>
+                            <a href="{{url_for('display', taskId=taskList.taskId)}}"> Update</a>
+                            <a href="{{url_for('delete', taskId=taskList.taskId)}}"> Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% endif %}
+                <!-- Script to enable sorting of tasks -->
+                <script>
+                    function sortTable(n) {
+                        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                        table = document.getElementById("taskTable");
+                        switching = true;
+                        // Set the sorting direction to ascending:
+                        dir = "asc";
+                        while (switching) {
+                            switching = false;
+                            rows = table.rows;
+                            for (i = 1; i < (rows.length - 1); i++) {
+                                shouldSwitch = false;
+                                x = rows[i].getElementsByTagName("TD")[n];
+                                y = rows[i + 1].getElementsByTagName("TD")[n];
+                                if (dir == "asc") {
+                                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                        shouldSwitch = true;
+                                        break;
+                                    }
+                                } else if (dir == "desc") {
+                                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                        shouldSwitch = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (shouldSwitch) {
+                                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                                switching = true;
+                                switchcount++;
+                            } else {
+                                if (switchcount == 0 && dir == "asc") {
+                                    dir = "desc";
+                                    switching = true;
+                                }
+                            }
+                        }
+                    }
+                </script>
+            </h2>
+            <a href="{{ url_for('tasks') }}" class="btn">Add Task</a>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </div>
+        </div>
+</body>
+</html>

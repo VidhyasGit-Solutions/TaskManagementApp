@@ -1,0 +1,63 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> Task Management </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+</head>
+<body>
+    </br>
+    <div align="center">
+        <div align="center" class="border">
+            <div class="header">
+                <h1 class="word">Add Task</h1>
+            </div></br>
+            <h2 class="word">
+                <form action="{{ url_for('addtask') }}" method="post">
+                    <table class="tablenoborder">
+                        <tr>
+                            <td>
+                                <input id="tasktitle" name="tasktitle" type="text" placeholder="Enter TaskTitle" class="textbox" />
+                                <span class="mandatory">*</span>
+                            </td>
+                            <td>
+                                <input id="taskdescription" name="taskdescription" type="text" placeholder="Enter TaskDescription" class="textbox" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="taskcategory" name="taskcategory" type="text" placeholder="Enter TaskCategory" class="textbox" />
+                            </td>
+                            <td>
+                                <select id="taskpriority" name="taskpriority" class="textbox">
+                                    <option disabled selected hidden class="textbox">Select an option</option>
+                                    <option value="high" class="textbox">High</option>
+                                    <option value="medium" class="textbox">Medium</option>
+                                    <option value="low" class="textbox">Low</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="taskstatus" name="taskstatus" class="textbox">
+                                    <option disabled selected hidden class="textbox">Select an option</option>
+                                    <option value="new" class="textbox">New</option>
+                                    <option value="pending" class="textbox">Pending</option>
+                                    <option value="inprogress" class="textbox">In-Progress</option>
+                                    <option value="complete" class="textbox">Completed</option>
+                                </select>
+                                <span class="mandatory">*</span>
+                            </td>
+                            <td>
+                                <input id="taskduedate" name="taskduedate" type="date" placeholder="Enter TaskDueDate" class="textbox" />
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <input type="submit" class="btn" value="Add Task">
+                    <a href="{{ url_for('tasklist') }}" class="link">View Task</a>
+                </form>
+            </h2>
+        </div>
+    </div>
+</body>
+</html>

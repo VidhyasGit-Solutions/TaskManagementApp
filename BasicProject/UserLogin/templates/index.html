@@ -5,15 +5,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
 </head>
 <body>
-    </br></br></br></br></br>
+    </br>
     <div align="center">
         <div align="center" class="border">
             <div class="header">
                 <h1 class="word">Task Management App</h1>
-            </div></br></br></br>
+            </div></br>
             <h1 class="bottom">
                 Hello {{session['username']}}!!</br></br> Welcome to the Task Management App
-            </h1></br></br></br>
+            </h1></br></br>
+            <a href="{{ url_for('tasks') }}" class="btn">Task Management</a>
             <a href="{{ url_for('logout') }}" class="btn">Logout</a>
         </div>
     </div>

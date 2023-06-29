@@ -32,7 +32,10 @@
 }
 
 .header {
-    padding: 5px 120px;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-left: 20px;
     width: 350px;
     height: 70px;
     background-color: #236B8E;
@@ -41,7 +44,7 @@
 .border {
     padding: 80px 50px;
     width: 600px;
-    height: 300px;
+    height: 350px;
     border: 1px solid #236B8E;
     border-radius: 0px;
     background-color: #9AC0CD;
@@ -74,10 +77,41 @@
     color: #FFFFFF;
     font-style: oblique;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .bottom {
     color: #236B8E;
     font-style: oblique;
     font-weight: bold;
+}
+
+.mandatory {
+    color: red;
+}
+
+.table, th, td {
+    border: 1px solid;
+    background-color: #236B8E;
+    color: #FFFFFF;
+}
+
+.editable-cell[contenteditable="true"]:focus {
+    border: 1px solid;
+    background-color: #236B8E;
+    color: #FFFFFF;
+}
+
+.tablenoborder {
+    background-color: #236B8E;
+    color: #000000;
+    font-style: oblique;
+    font-weight: bold;
+}
+
+.link {
+    background-color: #236B8E;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 20px;
 }
