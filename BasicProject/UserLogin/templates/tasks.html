@@ -3,6 +3,21 @@
     <meta charset="UTF-8">
     <title> Task Management </title>
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
+    <script>
+        // Function to sort the table by column
+        function validateForm() {
+            let x = document.forms["task"]["tasktitle"].value;
+            let y = document.forms["task"]["taskstatus"].value;
+            if (x == "") {
+                alert("Task Title must be filled out");
+                return false;
+            }
+            if (y == "") {
+                alert("Task Status must be filled out", y.value);
+                return false;
+            }
+        }
+    </script>
 </head>
 <body>
     </br>
@@ -12,7 +27,7 @@
                 <h1 class="word">Add Task</h1>
             </div></br>
             <h2 class="word">
-                <form action="{{ url_for('addtask') }}" method="post">
+                <form name="task" action="{{ url_for('addtask') }}" onsubmit="return validateForm()" method="post">
                     <table class="tablenoborder">
                         <tr>
                             <td>
@@ -29,7 +44,7 @@
                             </td>
                             <td>
                                 <select id="taskpriority" name="taskpriority" class="textbox">
-                                    <option disabled selected hidden class="textbox">Select an option</option>
+                                    <option value="" class="textbox">Select Task Priority</option>
                                     <option value="high" class="textbox">High</option>
                                     <option value="medium" class="textbox">Medium</option>
                                     <option value="low" class="textbox">Low</option>
@@ -39,7 +54,7 @@
                         <tr>
                             <td>
                                 <select id="taskstatus" name="taskstatus" class="textbox">
-                                    <option disabled selected hidden class="textbox">Select an option</option>
+                                    <option value="" class="textbox">Select Task Status</option>
                                     <option value="new" class="textbox">New</option>
                                     <option value="pending" class="textbox">Pending</option>
                                     <option value="inprogress" class="textbox">In-Progress</option>

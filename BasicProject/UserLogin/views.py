@@ -1,3 +1,5 @@
+from ast import Break
+from symbol import break_stmt
 from flask import Flask, render_template, request, redirect, url_for, session
 from UserLogin import runserver
 from werkzeug.security import generate_password_hash
@@ -34,6 +36,17 @@ def login():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
+
+        # Check if input field are provided
+        if len(username) == 0:
+            print('username does not exist')
+            msg = 'Please provide username'
+            return render_template('login.html', msg = msg)
+        
+        if len(password) == 0:
+            print('password does not exist')
+            msg = 'Please provide password'
+            return render_template('login.html', msg = msg)
 
         # Establish a connection to the SQL Server database
         try:
@@ -89,6 +102,7 @@ def logout():
 @runserver.route('/tasks')
 def tasks():
     print("Getting into Task Screen")
+    msg = ''
     return render_template('tasks.html')
 
 @runserver.route('/addtask', methods =['GET', 'POST'])
@@ -102,7 +116,10 @@ def addtask():
     Returns:
     - Renders the taskList page.
     """
+    print("Getting into AddTask function")
+    msg = ''
     if request.method == 'POST' and 'tasktitle' in request.form and 'taskstatus' in request.form :
+        print("Getting into If block of AddTask function")
         tasktitle = request.form['tasktitle']
         taskdescription = request.form['taskdescription']
         taskcategory = request.form['taskcategory']
@@ -110,7 +127,8 @@ def addtask():
         taskstatus = request.form['taskstatus']
         taskduedate = request.form['taskduedate']
         user_id = session.get('id')
-
+        
+        
         # Establish a connection to the SQL Server database
         try:
             conn = create_db_connection()
@@ -261,9 +279,24 @@ def register():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form :
         username = request.form['username']
         password = request.form['password']
-        password_hash = generate_password_hash(password)
         email = request.form['email']
+        # Check if input values are provided
+        if len(username) == 0:
+            print('username does not exist')
+            msg = 'Please provide username'
+            return render_template('register.html', msg = msg)
+        
+        if len(password) == 0:
+            print('password does not exist')
+            msg = 'Please provide password'
+            return render_template('register.html', msg = msg)
 
+        if len(email) == 0:
+            print('email does not exist')
+            msg = 'Please provide email'
+            return render_template('register.html', msg = msg)
+        
+        password_hash = generate_password_hash(password)
         # Establish a connection to the SQL Server database
         try:
             conn = create_db_connection()
