@@ -1,11 +1,12 @@
-from ast import Break
-from symbol import break_stmt
 from flask import Flask, render_template, request, redirect, url_for, session
 from UserLogin import runserver
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
-import pyodbc
+#import pyodbc
 import re
+import sqlite3
+import os
+
 
 # MSSQL Database connection details
 
@@ -14,11 +15,6 @@ database = 'TaskManagementDB'
 driver = '{ODBC Driver 17 for SQL Server}'  # Adjust the driver based on your installed version
 
 conn_str = f'DRIVER={driver};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-
-# Returns the successful connection
-
-def create_db_connection():
-    return pyodbc.connect(conn_str)
 
 @runserver.route('/')
 @runserver.route('/login', methods =['GET', 'POST'])
@@ -50,13 +46,15 @@ def login():
 
         # Establish a connection to the SQL Server database
         try:
-            conn = create_db_connection()
+            print(os.getcwd())
+            #Connecting to sqlite
+            conn = sqlite3.connect('TaskManagementDB.db')
             cursor = conn.cursor()
 
-            cursor.execute('SELECT * FROM dbo.useraccounts WHERE username = ?', (username))
+            cursor.execute('SELECT Id, username, password FROM useraccounts WHERE username = ?', (username,))
             account = cursor.fetchone()
             print("First DB row:",account)
-        except pyodbc.Error as e:
+        except sqlite3.Error as e:
             # Handle the specific SQL exception
             print("An error occurred:", e)
         finally:
@@ -131,12 +129,20 @@ def addtask():
         
         # Establish a connection to the SQL Server database
         try:
-            conn = create_db_connection()
+            #Connecting to sqlite
+            conn = sqlite3.connect('TaskManagementDB.db')
             cursor = conn.cursor()
-               
-            cursor.execute('INSERT INTO dbo.taskdetails (UserId,name,description,priority,category,status,duedate) VALUES (?, ?, ?, ?, ?, ?, ?)', (user_id, tasktitle, taskdescription, taskpriority, taskcategory, taskstatus, taskduedate))
+
+            # Example insert statement with datetime field
+            insert_query = "INSERT INTO taskdetails (UserId,name,description,priority,category,status,duedate) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            values = (user_id, tasktitle, taskdescription, taskpriority, taskcategory, taskstatus, taskduedate)
+
+            # Execute the insert statement
+            cursor.execute(insert_query, values)
+
             conn.commit()
-        except pyodbc.Error as e:
+            print("Successfully Inserted the task row")
+        except sqlite3.Error as e:
             # Handle the specific SQL exception
             print("An error occurred:", e)
         finally:
@@ -165,12 +171,13 @@ def updatetask(taskId):
 
         # Establish a connection to the SQL Server database
         try:
-            conn = create_db_connection()
+            #Connecting to sqlite
+            conn = sqlite3.connect('TaskManagementDB.db')
             cursor = conn.cursor()
                
-            cursor.execute('UPDATE dbo.taskdetails SET name = ?, description = ?, priority = ?, category = ?, status = ?, duedate = ? WHERE taskId = ?', (tasktitle, taskdescription, taskcategory, taskpriority, taskstatus, taskduedate, taskId))
+            cursor.execute('UPDATE taskdetails SET name = ?, description = ?, priority = ?, category = ?, status = ?, duedate = ? WHERE taskId = ?', (tasktitle, taskdescription, taskpriority, taskcategory, taskstatus, taskduedate, taskId))
             conn.commit()
-        except pyodbc.Error as e:
+        except sqlite3.Error as e:
             # Handle the specific SQL exception
             print("An error occurred:", e)
         finally:
@@ -192,20 +199,23 @@ def tasklist():
     msg = 'You have successfully created the task !'
 
     user_id = session.get('id')
+    print("Inside the taskList function, check the user_id",user_id)
     # Establish a connection to the SQL Server database
     try:
-        conn = create_db_connection()
+        #Connecting to sqlite
+        conn = sqlite3.connect('TaskManagementDB.db')
         cursor = conn.cursor()
 
-        cursor.execute('SELECT taskId,name,category,priority,status FROM dbo.taskdetails WHERE UserId = ?', (user_id))
+        cursor.execute('SELECT taskId,name,category,priority,status FROM taskdetails WHERE UserId = ?', (user_id,))
         taskLists = cursor.fetchall()
-    except pyodbc.Error as e:
+        print("TaskList :",taskLists)
+    except sqlite3.Error as e:
         # Handle the specific SQL exception
         print("An error occurred:", e)
     finally:
         cursor.close
         conn.close
-    return render_template('taskList.html', msg=msg, taskLists = taskLists)
+    return render_template('taskList.html', taskLists = taskLists)
 
 @runserver.route('/delete/<taskId>', methods =['GET', 'POST'])
 def delete(taskId):
@@ -221,21 +231,26 @@ def delete(taskId):
 
     # Establish a connection to the SQL Server database
     try:
-        conn = create_db_connection()
+        #Connecting to sqlite
+        conn = sqlite3.connect('TaskManagementDB.db')
         cursor = conn.cursor()
-        cursor.execute('DELETE FROM dbo.taskdetails WHERE taskId = ?', (taskId))
-        cursor.commit()
+        print("Inside of Delete function - taskId - ",taskId)
+        cursor.execute('DELETE FROM taskdetails WHERE taskId = ?', (taskId,))
+        print("Inside of Delete function - taskId - ",taskId)
+        conn.commit()
+        print("Inside of Delete function - taskId - ",taskId)
         
         user_id = session.get('id')
-        cursor.execute('SELECT taskId,name,category,priority,status FROM dbo.taskdetails WHERE UserId = ?', (user_id))
+        print("Inside of Delete function - user_id - ",user_id)
+        cursor.execute('SELECT taskId,name,category,priority,status FROM taskdetails WHERE UserId = ?', (user_id,))
         taskLists = cursor.fetchall()
-    except pyodbc.Error as e:
+    except sqlite3.Error as e:
         # Handle the specific SQL exception
         print("An error occurred:", e)
     finally:
         cursor.close
         conn.close
-    return render_template('taskList.html', taskLists = taskLists)
+    return render_template('taskList.html', taskLists=taskLists)
 
 @runserver.route('/display/<taskId>', methods =['GET', 'POST'])
 def display(taskId):
@@ -250,13 +265,14 @@ def display(taskId):
     """
     # Establish a connection to the SQL Server database
     try:
-        conn = create_db_connection()
+        #Connecting to sqlite
+        conn = sqlite3.connect('TaskManagementDB.db')
         cursor = conn.cursor()
         
-        cursor.execute('SELECT taskId, UserId, name, description, category, priority, status, CONVERT(VARCHAR(10), duedate, 23) AS formatted_date FROM dbo.taskdetails WHERE taskId = ?', (taskId))
+        cursor.execute('SELECT taskId, UserId, name, description, category, priority, status, duedate FROM taskdetails WHERE taskId = ?', (taskId,))
         taskdisplay = cursor.fetchone()
         print("Fetched Task Detail Row :",taskdisplay)
-    except pyodbc.Error as e:
+    except sqlite3.Error as e:
         # Handle the specific SQL exception
         print("An error occurred:", e)
     finally:
@@ -299,10 +315,11 @@ def register():
         password_hash = generate_password_hash(password)
         # Establish a connection to the SQL Server database
         try:
-            conn = create_db_connection()
+            #Connecting to sqlite
+            conn = sqlite3.connect('TaskManagementDB.db')
             cursor = conn.cursor()
 
-            cursor.execute('SELECT * FROM dbo.useraccounts WHERE username = ?', (username))
+            cursor.execute('SELECT Id FROM useraccounts WHERE username = ?', (username,))
             account = cursor.fetchone()
             if account:
                 msg = 'Account already exists !'
@@ -313,10 +330,10 @@ def register():
             elif not username or not password or not email:
                 msg = 'Please fill out the form !'
             else:
-                cursor.execute('INSERT INTO dbo.useraccounts (username,password,email) VALUES (?, ?, ?)', (username, password_hash, email))
+                cursor.execute('INSERT INTO useraccounts (username,password,email) VALUES (?, ?, ?)', (username, password_hash, email))
                 conn.commit()
                 msg = 'You have successfully registered !'
-        except pyodbc.Error as e:
+        except sqlite3.Error as e:
             # Handle the specific SQL exception
             print("An error occurred:", e)
         finally:

@@ -49,18 +49,19 @@
                     </tr>
                     {% for taskList in taskLists %}
                     <tr>
-                        <td class="td">{{ taskList.name }}</td>
-                        <td class="td">{{ taskList.category }}</td>
-                        <td class="td">{{ taskList.priority }}</td>
-                        <td class="td">{{ taskList.status }}</td>
+                        <td class="td">{{ taskList[1] }}</td>
+                        <td class="td">{{ taskList[2] }}</td>
+                        <td class="td">{{ taskList[3] }}</td>
+                        <td class="td">{{ taskList[4] }}</td>
                         <td>
-                            <a href="{{url_for('display', taskId=taskList.taskId)}}"> Update</a>
-                            <a href="{{url_for('delete', taskId=taskList.taskId)}}"> Delete</a>
+                            <a href="{{url_for('display', taskId=taskList[0])}}"> Update</a>
+                            <a href="{{url_for('delete', taskId=taskList[0])}}"> Delete</a>
                         </td>
                     </tr>
                     {% endfor %}
                 </table>
                 {% endif %}
+
                 <!-- Script to enable sorting of tasks -->
                 <script>
                     function sortTable(n) {
